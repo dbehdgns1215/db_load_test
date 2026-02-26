@@ -42,6 +42,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: lock-app:latest
     container_name: lock-app1
     environment:
       DB_HOST: mysql
@@ -64,9 +65,7 @@ services:
 
   # Spring Boot 서버 2
   app2:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: lock-app:latest
     container_name: lock-app2
     environment:
       DB_HOST: mysql
@@ -80,6 +79,8 @@ services:
     ports:
       - "8083:8080"
     depends_on:
+      app1:
+        condition: service_started
       mysql:
         condition: service_healthy
       redis:
@@ -89,9 +90,7 @@ services:
 
   # Spring Boot 서버 3
   app3:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: lock-app:latest
     container_name: lock-app3
     environment:
       DB_HOST: mysql
@@ -105,6 +104,8 @@ services:
     ports:
       - "8084:8080"
     depends_on:
+      app1:
+        condition: service_started
       mysql:
         condition: service_healthy
       redis:
